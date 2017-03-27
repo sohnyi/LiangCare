@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SQLiteDatabase database = Connector.getDatabase();
 
         mAppLockButton = (Button) findViewById(R.id.app_lock);
+
+
         mAppLockButton.setOnClickListener(this);
     }
 

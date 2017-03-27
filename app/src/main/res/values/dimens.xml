@@ -8,5 +8,14 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+    
+    
 
+
+    <dimen name="login_activity_margin">16dp</dimen>
+    <dimen name="margin_64">64dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_128">96dp</dimen>
+    <dimen name="pass_button_size">75dp</dimen>
+    <dimen name="stroke_width">2dp</dimen>
 </resources>
