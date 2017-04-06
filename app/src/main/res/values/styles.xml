@@ -12,7 +12,7 @@
         <item name="android:layout_height">@dimen/pass_button_size</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">32sp</item>
         <item name="android:background">@drawable/btn_transback_with_white_effect</item>
         <item name="android:layout_margin">@dimen/margin_8</item>
     </style>

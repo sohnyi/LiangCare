@@ -25,9 +25,10 @@
         </activity>
 
         <activity android:name="ui.LoginActivity"
-                android:theme="@style/TranslucentTheme">
+                android:theme="@style/TranslucentTheme" >
 
         </activity>
+
     </application>
 
 </manifest>
