@@ -5,6 +5,10 @@
     <string name="app_count_text">未上锁应用%1$d个</string>
 
     <string name="enter_pass">请输入解锁密码</string>
+    <string name="min_length_is_4">密码最短长度为4!</string>
+    <string name="set_password">请设置解锁密码</string>
+    <string name="confirm_password">请确认解锁密码</string>
+    <string name="wrong_pass">密码错误!</string>
 
     <string name="zero">0</string>
     <string name="one">1</string>
