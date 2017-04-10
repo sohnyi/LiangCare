@@ -196,7 +196,7 @@
         <Button
             android:id="@+id/but_ok"
             style="@style/passwordKeypadBut"
-            android:text="@string/checkmark"/>
+            android:text="@string/check_mark"/>
 
 
     </LinearLayout>

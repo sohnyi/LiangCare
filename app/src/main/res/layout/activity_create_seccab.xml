@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="@dimen/dimen_16">
+
+
+    <TextView
+        android:layout_margin="@dimen/dimen_16"
+        android:padding="@dimen/dimen_16"
+        android:id="@+id/storage_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/storage_location_select"
+        android:textSize="16sp"
+        android:drawableRight="@drawable/ic_chevron_right_black_24dp"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/set_storage_pass_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:layout_marginRight="@dimen/dimen_16"
+        android:layout_marginBottom="@dimen/dimen_8"
+        android:layout_below="@id/storage_location"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/secCab_passSet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_8"
+            android:inputType="numberPassword"
+            android:hint="@string/set_password"
+            android:maxLines="1"
+            android:maxLength="16"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/conf_storage_pass_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:layout_marginRight="@dimen/dimen_16"
+        android:layout_marginBottom="@dimen/dimen_8"
+        android:layout_below="@id/set_storage_pass_layout"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/secCab_passConf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_8"
+            android:inputType="numberPassword"
+            android:hint="@string/confirm_password"
+            android:maxLines="1"
+            android:maxLength="16"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/storage_pass_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dimen_16"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:layout_marginBottom="@dimen/dimen_16"
+        android:padding="@dimen/dimen_8"
+        android:layout_below="@id/conf_storage_pass_layout"
+        android:text="@string/pass_4_16"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/dimen_16"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/done_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_16"
+            android:text="@string/done"/>
+
+        <Button
+            android:id="@+id/cancel_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_16"
+            android:text="@string/cancel"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

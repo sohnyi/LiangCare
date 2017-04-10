@@ -3,6 +3,8 @@
           package="com.sohnyi.liangcare">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -27,6 +29,21 @@
         <activity android:name="ui.LoginActivity"
                 android:theme="@style/TranslucentTheme"
                 android:launchMode="singleInstance">
+
+        </activity>
+
+        <activity android:name="ui.SecCabLogin" >
+            <intent-filter>
+                <action android:name="liangCare_ACTION_START_SECCAB" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".CreateSecCabActivity"
+            android:launchMode="singleInstance">
+
+        </activity>
+
+        <activity android:name=".SecCabActivity" >
 
         </activity>
 

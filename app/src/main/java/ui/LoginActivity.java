@@ -130,6 +130,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 setPassword(password);
                                 Intent intent = new Intent(LoginActivity.this, AppLockActivity.class);
                                 startActivity(intent);
+                                this.finish();
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 Log.d(TAG, "onClick: " + e);
@@ -152,6 +153,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         if (in_pass.equals(password)) {
                             Intent intent = new Intent(LoginActivity.this, AppLockActivity.class);
                             startActivity(intent);
+                            this.finish();
                         } else {
                             ShowToast.showToast(getApplicationContext(), R.string.wrong_pass);
                         }
@@ -167,6 +169,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     mPassInputShow.setText(mPassInputShow.
                             getText().subSequence(0, mPassInputShow.getText().length() - 1));
                 }
+                break;
+            default:
                 break;
 
         }

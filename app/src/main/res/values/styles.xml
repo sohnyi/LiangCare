@@ -14,7 +14,7 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">32sp</item>
         <item name="android:background">@drawable/btn_transback_with_white_effect</item>
-        <item name="android:layout_margin">@dimen/margin_8</item>
+        <item name="android:layout_margin">@dimen/dimen_8</item>
     </style>
 
 

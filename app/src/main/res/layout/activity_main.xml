@@ -17,5 +17,12 @@
         android:layout_height="wrap_content"
         android:text="@string/app_lock"/>
 
+    <Button
+        android:id="@+id/security_cabinet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_lock"
+        android:text="@string/security_cabinet"/>
+
 
 </RelativeLayout>

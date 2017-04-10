@@ -14,7 +14,8 @@ import ui.LoginActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
-    private Button mAppLockButton;
+    private Button mAppLockBut;
+    private Button mSecCabBut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,19 +24,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         SQLiteDatabase database = Connector.getDatabase();
 
-        mAppLockButton = (Button) findViewById(R.id.app_lock);
+        mAppLockBut = (Button) findViewById(R.id.app_lock);
+        mSecCabBut = (Button) findViewById(R.id.security_cabinet);
 
 
-        mAppLockButton.setOnClickListener(this);
+        mAppLockBut.setOnClickListener(this);
+        mSecCabBut.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.app_lock :
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 Log.d(TAG , "Start AppLockActivity");
+                break;
+            case R.id.security_cabinet:
+                Log.d(TAG, "onClick: " + v.getId());
+                intent = new Intent(MainActivity.this, CreateSecCabActivity.class);
+                startActivity(intent);
                 break;
         }
     }
