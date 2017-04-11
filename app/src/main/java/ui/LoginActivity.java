@@ -53,7 +53,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_login);
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean is_first_open = pref.getBoolean("isFirstOpen", true);
+        boolean is_first_open = pref.getBoolean("appLock_isFirstOpen", true);
         Log.d(TAG, "onCreate: is first open:" + is_first_open);
 
         initView();
@@ -98,7 +98,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 mPassInputShow.append("9");
                 break;
             case R.id.but_ok :
-                String password = pref.getString("password", "");
+                String password = pref.getString("appLock_password", "");
                 if (password.equals("")) {
                     Log.d(TAG, "onClick: confirm :" + confirm);
                     if (!confirm) {
@@ -208,8 +208,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     public void setPassword(String pass) {
         SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean("isFirstOpen", false)
-                .putString("password", pass)
+        editor.putBoolean("appLock_isFirstOpen", false)
+                .putString("appLock_password", pass)
                 .apply();
         Log.d(TAG, "setPassword: set is first open value");
     }

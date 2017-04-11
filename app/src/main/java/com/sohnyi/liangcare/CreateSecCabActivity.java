@@ -2,7 +2,9 @@ package com.sohnyi.liangcare;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.ArrayRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,12 +15,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.security.MessageDigest;
+
+import utils.ShowToast;
+
 /**
  * Created by sohnyi on 2017/4/9.
  */
 
 public class CreateSecCabActivity extends AppCompatActivity implements View.OnClickListener{
+
     private static final String TAG = "CreateSecCabActivity";
+
+    private SharedPreferences pref;
 
     private TextView mTextView_StorLoca;
     private EditText mEditText_StorSetPass;
@@ -36,6 +45,7 @@ public class CreateSecCabActivity extends AppCompatActivity implements View.OnCl
                                     | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         initViews();
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
 
@@ -54,13 +64,31 @@ public class CreateSecCabActivity extends AppCompatActivity implements View.OnCl
                 mDialog_selectLoca.show();
                 break;
             case R.id.done_action:
-                Intent intent = new Intent(CreateSecCabActivity.this, SecCabActivity.class);
-                startActivity(intent);
-                /*String pass_set = mEditText_StorSetPass.getText().toString().trim();
+                String pass_set = mEditText_StorSetPass.getText().toString().trim();
                 if (pass_set.length() >= 4) {
                     String pass_con = mEditText_StorConPass.getText().toString().trim();
                     if (pass_con.equals(pass_set)){
-                        ShowToast.showToast(getApplicationContext(), R.string.pass_set_suss);
+                        try {
+                            MessageDigest digest = MessageDigest.getInstance("MD5");
+                            digest.reset();
+                            digest.update(pass_con.getBytes());
+                            byte[] bytes = digest.digest();
+                            StringBuffer hexString = new StringBuffer();
+                            for (byte b : bytes) {
+                                hexString.append(Integer.toHexString(0xFF & b));
+                            }
+                            String password = hexString.toString();
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putBoolean("secCab_isFirstOpen", false)
+                                    .putString("secCab_password", password)
+                                    .apply();
+                            ShowToast.showToast(getApplicationContext(), R.string.pass_set_suss);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        SharedPreferences.Editor editor = pref.edit();
                         Intent intent = new Intent(CreateSecCabActivity.this, SecCabActivity.class);
                         startActivity(intent);
                         this.finish();
@@ -69,7 +97,7 @@ public class CreateSecCabActivity extends AppCompatActivity implements View.OnCl
                     }
                 } else {
                     ShowToast.showToast(getApplicationContext(), R.string.min_length_is_4);
-                }*/
+                }
                 break;
             case R.id.cancel_action:
                 this.finish();

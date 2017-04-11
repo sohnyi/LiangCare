@@ -42,6 +42,8 @@
                 android:text="@string/num_0"
                 android:textSize="12.0sp"/>
 
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -129,7 +131,6 @@
         </LinearLayout>
 
     </GridLayout>
-
 
 
 </LinearLayout>
