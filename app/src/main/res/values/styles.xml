@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="passwordKeypadBut">
         <item name="android:layout_width">@dimen/pass_button_size</item>
         <item name="android:layout_height">@dimen/pass_button_size</item>
@@ -15,6 +16,40 @@
         <item name="android:textSize">32sp</item>
         <item name="android:background">@drawable/btn_transback_with_white_effect</item>
         <item name="android:layout_margin">@dimen/dimen_8</item>
+    </style>
+
+    <style name="myCardView" parent="Base.CardView">
+        <item name="android:layout_rowWeight">1</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_marginTop">@dimen/dimen_8</item>
+        <item name="android:layout_marginBottom">@dimen/dimen_4</item>
+        <item name="android:paddingTop">@dimen/dimen_16</item>
+        <item name="android:paddingBottom">@dimen/dimen_16</item>
+        <item name="android:clickable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="myCardView.L">
+        <item name="android:layout_marginLeft">@dimen/dimen_16</item>
+        <item name="android:layout_marginRight">@dimen/dimen_8</item>
+    </style>
+
+    <style name="myCardView.R">
+        <item name="android:layout_marginLeft">@dimen/dimen_8</item>
+        <item name="android:layout_marginRight">@dimen/dimen_16</item>
+    </style>
+
+    <style name="myCardView.Main">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/dimen_64</item>
+        <item name="android:paddingRight">@dimen/dimen_64</item>
+    </style>
+    
+    <style name="ALSwitch" parent="Theme.AppCompat.Light" >
+        <item name="colorControlActivated">@color/enable_thumb_teal</item>
+        <item name="colorSwitchThumbNormal">#f1f1f1</item>
+        <item name="android:colorForeground">#42221f1f</item>
     </style>
 
 

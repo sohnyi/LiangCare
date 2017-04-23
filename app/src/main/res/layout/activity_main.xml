@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,18 +12,115 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.sohnyi.liangcare.MainActivity">
 
-    <Button
-        android:id="@+id/app_lock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_lock"/>
+    <android.support.v7.widget.CardView
+        android:id="@+id/app_lock_cardView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        app:cardCornerRadius="@dimen/dimen_8"
+        android:elevation="@dimen/dimen_4"
+        style="@style/myCardView.Main">
 
-    <Button
-        android:id="@+id/security_cabinet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/app_lock"
-        android:text="@string/security_cabinet"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_16"
+            android:paddingBottom="@dimen/dimen_16"
+            android:paddingLeft="48dp"
+            android:paddingRight="48dp">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/lock_64"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_lock"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/sec_cab_cardView"
+        android:layout_alignParentRight="true"
+        app:cardCornerRadius="@dimen/dimen_8"
+        android:elevation="@dimen/dimen_4"
+        style="@style/myCardView.Main">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_16"
+            android:paddingBottom="@dimen/dimen_16"
+            android:paddingLeft="48dp"
+            android:paddingRight="48dp">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/safe_64"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/security_cabinet"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/virus_scan_cardView"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/sec_cab_cardView"
+        app:cardCornerRadius="@dimen/dimen_8"
+        android:elevation="@dimen/dimen_4"
+        style="@style/myCardView.Main">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="@dimen/dimen_16"
+            android:paddingBottom="@dimen/dimen_16"
+            android:paddingLeft="48dp"
+            android:paddingRight="48dp">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/virus_scan_64"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vius_scan"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
 
 
 </RelativeLayout>

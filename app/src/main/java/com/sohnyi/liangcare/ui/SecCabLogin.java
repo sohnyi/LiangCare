@@ -1,4 +1,4 @@
-package ui;
+package com.sohnyi.liangcare.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

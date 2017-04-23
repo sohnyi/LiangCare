@@ -1,4 +1,4 @@
-package ui;
+package com.sohnyi.liangcare.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,10 +14,9 @@ import android.widget.TextView;
 
 import com.sohnyi.liangcare.AppLockActivity;
 import com.sohnyi.liangcare.R;
+import com.sohnyi.liangcare.utils.ShowToast;
 
 import java.security.MessageDigest;
-
-import utils.ShowToast;
 
 /**
  * Created by sohnyi on 2017/3/11.

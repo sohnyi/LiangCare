@@ -1,4 +1,4 @@
-package utils;
+package com.sohnyi.liangcare.utils;
 
 import android.app.Activity;
 

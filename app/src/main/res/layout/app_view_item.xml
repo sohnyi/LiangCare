@@ -15,6 +15,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:src="@mipmap/ic_launcher"
         android:cropToPadding="true"/>
 
     <TextView
@@ -25,11 +26,13 @@
         android:gravity="center"
         tool:text="@string/app_name"/>
 
-    <ImageView
-        android:id="@+id/item_app_lock"
+
+    <Switch
+        android:id="@+id/item_app_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:checked="false"/>
 
 </RelativeLayout>

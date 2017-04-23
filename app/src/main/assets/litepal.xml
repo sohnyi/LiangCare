@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
-    <dbname value="care" ></dbname>
+    <dbname value="Care" ></dbname>
 
     <version value="1" ></version>
 
     <list>
-        <mapping class="database.LiangApp"></mapping>
+        <mapping class="com.sohnyi.liangcare.database.LiangApp"></mapping>
     </list>
 </litepal>

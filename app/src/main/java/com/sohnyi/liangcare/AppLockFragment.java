@@ -1,11 +1,15 @@
 package com.sohnyi.liangcare;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,127 +17,225 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import com.sohnyi.liangcare.database.LiangApp;
+import com.sohnyi.liangcare.database.LiangAppLab;
+import com.sohnyi.liangcare.utils.AppsUsage;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by sohnyi on 2017/3/12.
  */
 
 public class AppLockFragment extends Fragment {
+
+    private static final String TAG = "AppLockFragment";
+    private static final String IS_FIRST_OPEN = "isFirstLoad";
+
+    private SharedPreferences mPreferences;
     private RecyclerView mRecyclerView;
+    private ProgressDialog mProgressDialog;
+    private AppLockAdapter mLockAdapter;
 
-    private boolean isLock = false;
-    private int count = 0;
-
-
-    public static AppLockFragment newInstance() {
-        return new AppLockFragment();
-    }
+    private int mPosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_app_lock, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_app_lock_recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration divider = new DividerItemDecoration(mRecyclerView.getContext(),
+                layoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(divider);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
-                DividerItemDecoration.HORIZONTAL));
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
+        boolean is_is_first_load = mPreferences.getBoolean(IS_FIRST_OPEN, true);
+        if (is_is_first_load) {
+            new InitAppInfo().execute();
+        }
 
-        setupAdapter();
+        AppsUsage.isStatAccessPermissionSet(getActivity());
+        updateUI();
         return view;
-
     }
 
-    private void setupAdapter() {
-        Intent startupIntent = new Intent(Intent.ACTION_MAIN);
-        startupIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
 
-        final PackageManager packageManager = getActivity().getPackageManager();
-        List<ResolveInfo> activities = packageManager.queryIntentActivities(startupIntent, 0);
-        Collections.sort(activities, new Comparator<ResolveInfo>() {
-            @Override
-            public int compare(ResolveInfo resolveInfo, ResolveInfo t1) {
-                return String.CASE_INSENSITIVE_ORDER.compare(
-                        resolveInfo.loadLabel(packageManager).toString(),
-                        t1.loadLabel(packageManager).toString()
-                );
-            }
-        });
-        mRecyclerView.setAdapter(new ActivityAdapter(activities));
+    @Override
+    public void onStart() {
+        super.onStart();
+        LiangAppLab appLab = LiangAppLab.get(getActivity());
+        List<LiangApp> apps = appLab.getApps();
+        mLockAdapter = new AppLockAdapter(apps);
+        mRecyclerView.setAdapter(mLockAdapter);
+    }
+
+    private void updateUI() {
+        LiangAppLab appLab = LiangAppLab.get(getActivity());
+        List<LiangApp> apps = appLab.getApps();
+
+        if (mLockAdapter == null) {
+            mLockAdapter = new AppLockAdapter(apps);
+            mRecyclerView.setAdapter(mLockAdapter);
+        } else {
+            mLockAdapter.setApps(apps);
+            mLockAdapter.notifyItemChanged(mPosition);
+        }
     }
 
 
-    private class ActivityHolder extends RecyclerView.ViewHolder {
-        private ResolveInfo mResolveInfo;
+
+
+    private class AppLockHolder extends RecyclerView.ViewHolder {
+        private LiangApp mApp;
         private TextView mNameTextView;
         private ImageView mIconImageView;
-        private ImageView mImageView;
-        public ActivityHolder(View itemView) {
+        private Switch mSwitch;
+
+        public AppLockHolder(View itemView) {
             super(itemView);
             mIconImageView = (ImageView) itemView.findViewById(R.id.item_app_icon);
             mNameTextView = (TextView) itemView.findViewById(R.id.item_app_name);
-            mImageView = (ImageView) itemView.findViewById(R.id.item_app_lock);
+            mSwitch = (Switch) itemView.findViewById(R.id.item_app_switch);
 
-            mImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    isLock = !isLock;
-                    bindActivity(mResolveInfo);
-                }
-            });
-            //itemView.setOnClickListener(this);
         }
 
-        public void bindActivity(ResolveInfo resolveInfo) {
-            mResolveInfo = resolveInfo;
+        public void bindApp(LiangApp app) {
+            mApp = app;
             PackageManager pm = getActivity().getPackageManager();
-            String appName = mResolveInfo.loadLabel(pm).toString();
-            mIconImageView.setImageDrawable(mResolveInfo.loadIcon(pm));
-            mNameTextView.setText(appName);
-
-            if (isLock == false) {
-                mImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_lock_open_blue_grey_500_24dp));
-            } else {
-                mImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_lock_light_green_a700_24dp));
+            try {
+                String appName = pm.getApplicationLabel(pm.getApplicationInfo(
+                        mApp.getPackageName(), PackageManager.GET_META_DATA)).toString();
+                Drawable icon =pm.getApplicationIcon(app.getPackageName());
+                mNameTextView.setText(appName);
+                mIconImageView.setImageDrawable(icon);
+                mSwitch.setChecked(mApp.isLock());
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
             }
         }
 
+
     }
 
-    private class ActivityAdapter extends RecyclerView.Adapter<ActivityHolder> {
-        private final List<ResolveInfo> mActivities;
+    private class AppLockAdapter extends RecyclerView.Adapter<AppLockHolder> {
+        private List<LiangApp> mApps;
 
-        public ActivityAdapter(List<ResolveInfo> activities) {
-            mActivities = activities;
+        public AppLockAdapter(List<LiangApp> apps) {
+
+            mApps = apps;
         }
 
         @Override
-        public ActivityHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public AppLockHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater
                     .inflate(R.layout.app_view_item, parent, false);
-            return new ActivityHolder(view);
+            final AppLockHolder holder = new AppLockHolder(view);
+            holder.mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int position = holder.getAdapterPosition();
+                    LiangApp app = mApps.get(position);
+                    if (app != null) {
+                        if (isChecked) {
+                            app.setLock(true);
+                            Log.d(TAG, "onCheckedChanged: " + app.getPackageName() + " lock");
+                        } else {
+                            app.setLock(false);
+                            Log.d(TAG, "onCheckedChanged: " + app.getPackageName() + " unlock");
+                        }
+                        app.save();
+                    }
+                }
+            });
+            return holder;
         }
 
         @Override
-        public void onBindViewHolder(ActivityHolder activityHolder, int position) {
-            ResolveInfo resolveInfo = mActivities.get(position);
-            activityHolder.bindActivity(resolveInfo);
+        public void onBindViewHolder(AppLockHolder appLockHolder, int position) {
+            mPosition = position;
+            LiangApp app = mApps.get(position);
+            appLockHolder.bindApp(app);
         }
 
         @Override
         public int getItemCount() {
-            Log.d(TAG, "getItemCount:" + mActivities.size());
-            return mActivities.size();
+            return mApps.size();
+        }
+
+        public void setApps(List<LiangApp> apps) {
+            mApps = apps;
+        }
+
+    }
+
+    private class InitAppInfo extends AsyncTask<Void, Void, Boolean> {
+        PackageManager packageManager = getActivity().getPackageManager();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setTitle(R.string.app_info_init);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                Intent startupIntent = new Intent(Intent.ACTION_MAIN);
+                startupIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(startupIntent, 0);
+                Collections.sort(resolveInfos, new Comparator<ResolveInfo>() {
+                    @Override
+                    public int compare(ResolveInfo o1, ResolveInfo o2) {
+                       return String.CASE_INSENSITIVE_ORDER.compare(
+                               o1.loadLabel(packageManager).toString(),
+                               o2.loadLabel(packageManager).toString()
+                       );
+                    }
+                });
+                for (ResolveInfo info : resolveInfos) {
+                    LiangApp liangApp = new LiangApp();
+                    String packageName = info.activityInfo.packageName;
+                    liangApp.setPackageName(packageName);
+                    liangApp.setLock(false);
+                    liangApp.setPassword(null);
+                    liangApp.setInpass(false);
+                    liangApp.save();
+                }
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putBoolean(IS_FIRST_OPEN, false)
+                        .apply();
+                Log.d(TAG, "doInBackground: data saved");
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            mProgressDialog.dismiss();
         }
     }
 }
