@@ -9,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 
+import com.sohnyi.liangcare.service.PackageService;
 import com.sohnyi.liangcare.ui.LoginActivity;
 import com.sohnyi.liangcare.ui.SecCabLogin;
 
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent i= PackageService.newIntent(this);
+        this.startService(i);
 
 //        SQLiteDatabase com.sohnyi.liangcare.database = Connector.getDatabase();
 
