@@ -51,7 +51,7 @@
         </activity>
 
         <!--services-->
-        <service android:name=".service.PackageService"
+        <service android:name=".service.AppLockService"
                  android:enabled="true"
                  android:exported="true">
 

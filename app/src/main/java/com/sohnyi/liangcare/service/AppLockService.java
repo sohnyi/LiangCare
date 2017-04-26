@@ -17,15 +17,15 @@ import com.sohnyi.liangcare.receiver.BootCompleteReceiver;
  * Created by sohnyi on 2017/4/19.
  */
 
-public class PackageService extends Service {
-    private static final String TAG = "PackageService";
+public class AppLockService extends Service {
+    private static final String TAG = "AppLockService";
     private static final int SERVICE_NOTIFICATION_ID = 1;
 
-    public PackageService() {
+    public AppLockService() {
     }
 
     public static Intent newIntent(Context context) {
-        return new Intent(context, PackageService.class);
+        return new Intent(context, AppLockService.class);
     }
 
     @Override
@@ -55,6 +55,9 @@ public class PackageService extends Service {
                 .build();
         startForeground(SERVICE_NOTIFICATION_ID, notification);
         Log.d(TAG, "onStartCommand: notification start foreground");
+
+
+
         return super.onStartCommand(intent, flags, startId);
     }
 

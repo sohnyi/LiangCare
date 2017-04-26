@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.sohnyi.liangcare.service.PackageService;
+import com.sohnyi.liangcare.service.AppLockService;
 import com.sohnyi.liangcare.utils.ShowToast;
 
 
@@ -19,7 +19,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         ShowToast.showToast(context, TAG + "boot complete");
-        Intent i= PackageService.newIntent(context);
+        Intent i= AppLockService.newIntent(context);
         context.startService(i);
         Log.d(TAG, "onReceive: ");
     }

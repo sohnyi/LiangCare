@@ -9,7 +9,7 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 
-import com.sohnyi.liangcare.service.PackageService;
+import com.sohnyi.liangcare.service.AppLockService;
 import com.sohnyi.liangcare.ui.LoginActivity;
 import com.sohnyi.liangcare.ui.SecCabLogin;
 
@@ -18,17 +18,18 @@ import org.litepal.tablemanager.Connector;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
 
+
     private SharedPreferences pref;
 
     private CardView mAppLockCad;
     private CardView mSecCabCad;
-    private CardView mViusCad;
+    private CardView mVirusCad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent i= PackageService.newIntent(this);
+        Intent i= AppLockService.newIntent(this);
         this.startService(i);
 
 //        SQLiteDatabase com.sohnyi.liangcare.database = Connector.getDatabase();
@@ -37,12 +38,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAppLockCad = (CardView) findViewById(R.id.app_lock_cardView);
         mSecCabCad = (CardView) findViewById(R.id.sec_cab_cardView);
-        mViusCad = (CardView) findViewById(R.id.virus_scan_cardView);
+        mVirusCad = (CardView) findViewById(R.id.virus_scan_cardView);
 
 
         mAppLockCad.setOnClickListener(this);
         mSecCabCad.setOnClickListener(this);
-        mViusCad.setOnClickListener(this);
+        mVirusCad.setOnClickListener(this);
         Connector.getDatabase();
     }
 
