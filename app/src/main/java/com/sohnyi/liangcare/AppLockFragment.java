@@ -47,6 +47,7 @@ public class AppLockFragment extends Fragment {
     private ProgressDialog mProgressDialog;
     private AppLockAdapter mLockAdapter;
 
+    private List<LiangApp> mLiangApps;
     private List<String> mLabels;
     private List<Drawable> mIcons;
     private PackageManager pm;
@@ -59,6 +60,10 @@ public class AppLockFragment extends Fragment {
         mLabels = new ArrayList<>();
         mIcons = new ArrayList<>();
         pm = getActivity().getPackageManager();
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setTitle(R.string.app_info_init);
+        mProgressDialog.setMessage(getString(R.string.loading));
+        mProgressDialog.setCancelable(false);
 
     }
 
@@ -91,27 +96,7 @@ public class AppLockFragment extends Fragment {
     }
 
     private void updateUI() {
-        LiangAppLab appLab = LiangAppLab.get(getActivity());
-        List<LiangApp> apps = appLab.getApps();
-        for (LiangApp app : apps) {
-            try {
-
-                mLabels.add(pm.getApplicationLabel(pm.getApplicationInfo(
-                        app.getPackageName(), PackageManager.GET_META_DATA)).toString());
-
-                mIcons.add(pm.getApplicationIcon(app.getPackageName()));
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.d(TAG, "updateUI: " + e.getMessage());
-            }
-        }
-
-        if (mLockAdapter == null) {
-            mLockAdapter = new AppLockAdapter(apps);
-            mRecyclerView.setAdapter(mLockAdapter);
-        } else {
-            mLockAdapter.setApps(apps);
-            mLockAdapter.notifyItemChanged(mPosition);
-        }
+        new InitData().execute();
     }
 
 
@@ -131,7 +116,6 @@ public class AppLockFragment extends Fragment {
 
         public void bindApp(LiangApp app, String label, Drawable icon, boolean lock) {
             mLabel = label;
-
             if (mLabels != null) {
                 mNameTextView.setText(mLabel);
             } else {
@@ -203,16 +187,51 @@ private class AppLockAdapter extends RecyclerView.Adapter<AppLockHolder> {
 
 }
 
+private class InitData extends AsyncTask<Void, Void, Boolean> {
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        mProgressDialog.show();
+    }
+
+    @Override
+    protected Boolean doInBackground(Void... params) {
+        LiangAppLab appLab = LiangAppLab.get(getActivity());
+        mLiangApps = appLab.getApps();
+        for (LiangApp app : mLiangApps) {
+            try {
+                mLabels.add(pm.getApplicationLabel(pm.getApplicationInfo(
+                        app.getPackageName(), PackageManager.GET_META_DATA)).toString());
+                mIcons.add(pm.getApplicationIcon(app.getPackageName()));
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.d(TAG, "updateUI: " + e.getMessage());
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    protected void onPostExecute(Boolean b) {
+        super.onPostExecute(b);
+        mProgressDialog.dismiss();
+        if (mLockAdapter == null) {
+            mLockAdapter = new AppLockAdapter(mLiangApps);
+            mRecyclerView.setAdapter(mLockAdapter);
+        } else {
+            mLockAdapter.setApps(mLiangApps);
+            mLockAdapter.notifyItemChanged(mPosition);
+        }
+    }
+}
+
 private class InitAppInfo extends AsyncTask<Void, Void, Boolean> {
     PackageManager packageManager = getActivity().getPackageManager();
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setTitle(R.string.app_info_init);
-        mProgressDialog.setMessage(getString(R.string.loading));
-        mProgressDialog.setCancelable(false);
+
         mProgressDialog.show();
     }
 
