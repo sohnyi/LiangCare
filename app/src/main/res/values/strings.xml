@@ -3,12 +3,23 @@
 
     <string name="app_lock">应用锁</string>
     <string name="security_cabinet">保密柜</string>
-    <string name="vius_scan">病毒扫描</string>
+    <string name="virus_scan">病毒扫描</string>
+    <string name="delete_image_button">删除图片按钮</string>
+    <string name="icon">图标</string>
+    <string name="lock_image">图片内容锁</string>
+    <string name="cabinet_image">图片内容柜子</string>
+    <string name="search_image">图片内容搜索</string>
+
+    <string name="permission_request">权限申请</string>
+    <string name="request_text">当前应用缺少必要权限</string>
+    <string name="quit">退出</string>
+    <string name="settings">设置</string>
 
     <string name="app_count_text">未上锁应用%1$d个</string>
     <string name="app_installed">已安装应用</string>
     <string name="app_info_init">应用信息初始化</string>
     <string name="loading">加载中...</string>
+    <string name="fun_need_app_usage">该功能需要使用应用记录访问权限</string>
 
 
     <string name="enter_pass">请输入解锁密码</string>

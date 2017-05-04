@@ -1,9 +1,6 @@
 package com.sohnyi.liangcare.database;
 
-import android.content.Context;
-
 import org.litepal.crud.DataSupport;
-import org.litepal.tablemanager.Connector;
 
 import java.util.List;
 
@@ -13,32 +10,23 @@ import java.util.List;
 
 public class LiangAppLab {
 
-    private static final String TAG = "ApppLab";
-    private static final String PACKAGENAME = "packageName";
-
     private static LiangAppLab sLiangAppLab;
-    private Context mContext;
 
-    private List<LiangApp> mLiangApps;
 
-    public static LiangAppLab get(Context context) {
+    public static LiangAppLab get() {
         if (sLiangAppLab == null) {
-            sLiangAppLab = new LiangAppLab(context);
+            sLiangAppLab = new LiangAppLab();
         }
 
         return sLiangAppLab;
     }
 
-    private LiangAppLab(Context context) {
-        mContext = context.getApplicationContext();
-        Connector.getDatabase();
+    private LiangAppLab() {
     }
 
     public List<LiangApp> getApps() {
 
-        List<LiangApp> apps = DataSupport.findAll(LiangApp.class);
-
-        return apps;
+        return DataSupport.findAll(LiangApp.class);
     }
 
 

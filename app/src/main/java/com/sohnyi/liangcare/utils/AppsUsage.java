@@ -1,14 +1,18 @@
 package com.sohnyi.liangcare.utils;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.AppOpsManager;
+import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.provider.Settings;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,19 +20,41 @@ import java.util.List;
  */
 
 public class AppsUsage {
-    /*获取过去1分钟内，APP启动情况的统计数据*/
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static List getUsageStatsList(Context context) {
-        UsageStatsManager manager = (UsageStatsManager) context.getSystemService(
-                Context.USAGE_STATS_SERVICE);
-        if ( manager != null) {
-            long timeNow = System.currentTimeMillis();
-            return manager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,
-                    timeNow - 60 * 1000, timeNow);
+
+    public static String getLauncherTopApp(Context context, ActivityManager activityManager) {
+
+        if (Build.VERSION.SDK_INT < 22) {
+            List<ActivityManager.RunningTaskInfo> appTasks = activityManager.getRunningTasks(1);
+            if (null != appTasks && !appTasks.isEmpty()) {
+                return appTasks.get(0).topActivity.getPackageName();
+            }
+        } else {
+            //5.0以后需要用这方法
+            UsageStatsManager sUsageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+            long endTime = System.currentTimeMillis();
+            long beginTime = endTime - 10000;
+            String result = "";
+            UsageEvents.Event event = new UsageEvents.Event();
+            UsageEvents usageEvents = sUsageStatsManager.queryEvents(beginTime, endTime);
+            while (usageEvents.hasNextEvent()) {
+                usageEvents.getNextEvent(event);
+                if (event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                    result = event.getPackageName();
+                }
+            }
+            if (!android.text.TextUtils.isEmpty(result)) {
+                return result;
+            }
         }
-        return Collections.EMPTY_LIST;
+        return null;
     }
 
+    /**
+     * 判断是否已经获取 有权查看使用情况的应用程序 权限
+     *
+     * @param context
+     * @return
+     */
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static boolean isStatAccessPermissionSet(Context context) {
@@ -43,4 +69,30 @@ public class AppsUsage {
         }
         return false;
     }
+
+
+    /**
+     * 查看是存在查看使用情况的应用程序界面
+     *
+     * @return
+     */
+    public static boolean isNoOption(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+    /**
+     * 转跳到 有权查看使用情况的应用程序 界面
+     *
+     * @param context
+     */
+    public static void startActionUsageAccessSettings(Context context) {
+        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        context.startActivity(intent);
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.sohnyi.liangcare;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,15 +10,21 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 
-import com.sohnyi.liangcare.service.AppLockService;
 import com.sohnyi.liangcare.ui.LoginActivity;
 import com.sohnyi.liangcare.ui.SecCabLogin;
+import com.sohnyi.liangcare.utils.PermissionsActivity;
+import com.sohnyi.liangcare.utils.PermissionsChecker;
 
 import org.litepal.tablemanager.Connector;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
-
+    /*权限请求码*/
+    private static final int REQUEST_CODE = 0;
+    private final String[] PERMISSIONS = new String[] {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
 
     private SharedPreferences pref;
 
@@ -25,26 +32,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CardView mSecCabCad;
     private CardView mVirusCad;
 
+    private PermissionsChecker mChecker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent i= AppLockService.newIntent(this);
-        this.startService(i);
-
-//        SQLiteDatabase com.sohnyi.liangcare.database = Connector.getDatabase();
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
         mAppLockCad = (CardView) findViewById(R.id.app_lock_cardView);
         mSecCabCad = (CardView) findViewById(R.id.sec_cab_cardView);
         mVirusCad = (CardView) findViewById(R.id.virus_scan_cardView);
+        mChecker = new PermissionsChecker(this);
 
 
         mAppLockCad.setOnClickListener(this);
         mSecCabCad.setOnClickListener(this);
         mVirusCad.setOnClickListener(this);
         Connector.getDatabase();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mChecker.lacksPermissions(PERMISSIONS)) {
+            startPermissionsActivity();
+        }
     }
 
     @Override
@@ -74,4 +88,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    private void startPermissionsActivity() {
+        PermissionsActivity.startActivityForResult(this, REQUEST_CODE, PERMISSIONS);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == PermissionsActivity.PERMISSIONS_DENIED) {
+            finish();
+        }
+    }
+
 }

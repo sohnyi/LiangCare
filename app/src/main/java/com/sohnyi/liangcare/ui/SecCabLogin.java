@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.sohnyi.liangcare.FindPassActivity;
 import com.sohnyi.liangcare.R;
 import com.sohnyi.liangcare.SecCabActivity;
+import com.sohnyi.liangcare.utils.FindPassActivity;
 
 import java.security.MessageDigest;
 
@@ -66,6 +66,7 @@ public class SecCabLogin extends AppCompatActivity implements View.OnClickListen
                     if (password.equals(pass_saved)) {
                         intent = new Intent(SecCabLogin.this, SecCabActivity.class);
                         startActivity(intent);
+                        finish();
                     }
 
                 } catch (Exception e) {

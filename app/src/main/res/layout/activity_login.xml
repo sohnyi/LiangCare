@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
         android:src="@mipmap/ic_launcher"
+        android:contentDescription="@string/icon"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
@@ -73,7 +74,8 @@
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         android:src="@drawable/ic_backspace_white_24dp"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/delete_image_button"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"

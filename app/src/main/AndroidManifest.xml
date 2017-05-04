@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.sohnyi.liangcare">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -7,9 +8,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.GET_TASKS"
-        android:maxSdkVersion="21"/>
-
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
+                     tools:ignore="ProtectedPermissions" />
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -25,46 +26,58 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity android:name=".AppLockActivity">
         </activity>
+
+        <activity android:name=".CreateSecCabActivity" >
+
+        </activity>
+
         <activity
             android:name="com.sohnyi.liangcare.ui.LoginActivity"
             android:launchMode="singleInstance"
             android:theme="@style/TranslucentTheme">
         </activity>
-        <activity android:name="com.sohnyi.liangcare.ui.SecCabLogin">
+
+        <activity
+            android:name="com.sohnyi.liangcare.ui.SecCabLogin"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="liangCare_ACTION_START_SECCAB"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CreateSecCabActivity"
-            android:launchMode="singleInstance">
-        </activity>
+
         <activity android:name=".SecCabActivity"
-            android:launchMode="singleTask">
+                  android:launchMode="singleTask">
         </activity>
+
         <activity android:name=".SecCabFileListActivity">
         </activity>
+
         <activity android:name=".VirusScanActivity"
             android:launchMode="singleTask">
         </activity>
 
+        <activity android:name=".utils.PermissionsActivity">
+        </activity>
+
+        <activity android:name=".utils.FindPassActivity">
+        </activity>
+
         <!--services-->
-        <service android:name=".service.AppLockService"
+        <service android:name=".service.LockService"
                  android:enabled="true"
-                 android:exported="true">
-
+                 android:exported="false">
         </service>
-
 
         <!--receivers-->
         <receiver
             android:name=".receiver.BootCompleteReceiver"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
-            <intent-filter android:priority="100">
+            <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />/>
             </intent-filter>
@@ -75,11 +88,11 @@
                   android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
 
     </application>
-
 </manifest>

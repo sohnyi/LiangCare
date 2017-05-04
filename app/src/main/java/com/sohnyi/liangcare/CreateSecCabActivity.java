@@ -15,9 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.security.MessageDigest;
-
 import com.sohnyi.liangcare.utils.ShowToast;
+
+import java.security.MessageDigest;
 
 /**
  * Created by sohnyi on 2017/4/9.
@@ -42,7 +42,7 @@ public class CreateSecCabActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_create_seccab);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                                    | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         initViews();
         pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -88,7 +88,6 @@ public class CreateSecCabActivity extends AppCompatActivity implements View.OnCl
                         }
 
 
-                        SharedPreferences.Editor editor = pref.edit();
                         Intent intent = new Intent(CreateSecCabActivity.this, SecCabActivity.class);
                         startActivity(intent);
                         this.finish();
@@ -126,7 +125,7 @@ public class CreateSecCabActivity extends AppCompatActivity implements View.OnCl
 
                     }
                 });
-      return builder.create();
+        return builder.create();
     }
 
 }
