@@ -72,6 +72,7 @@ public class AppLockFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         pm = getActivity().getPackageManager();
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle(R.string.app_info_init);
@@ -189,7 +190,7 @@ public class AppLockFragment extends Fragment {
                             app.setLock(false);
                             LogUtil.d(TAG, "onCheckedChanged: " + app.getPackageName() + " unlock");
                         }
-                        app.save();
+                        app.updateAll("packageName = ?", app.getPackageName());
                     }
                 }
             });
@@ -234,10 +235,15 @@ public class AppLockFragment extends Fragment {
                 try {
                     mLabels.add(pm.getApplicationLabel(pm.getApplicationInfo(
                             app.getPackageName(), PackageManager.GET_META_DATA)).toString());
+                } catch (PackageManager.NameNotFoundException e) {
+                    mLabels.add(app.getPackageName().substring(app.getPackageName().indexOf('.') + 1));
+                    LogUtil.e(TAG, "updateUI: label" + e.getMessage());
+                }
+                try {
                     mIcons.add(pm.getApplicationIcon(app.getPackageName()));
                 } catch (PackageManager.NameNotFoundException e) {
-                    LogUtil.e(TAG, "updateUI: " + e.getMessage());
-                    return false;
+                    mIcons.add(getActivity().getDrawable(R.mipmap.default_icon));
+                    LogUtil.e(TAG, "updateUI: icon" + e.getMessage());
                 }
             }
             if ((mLiangApps.size() == mLabels.size()) && (mLiangApps.size() == mIcons.size())) {
@@ -293,6 +299,10 @@ public class AppLockFragment extends Fragment {
                     String packageName = info.activityInfo.packageName;
                     mAppLab.addApp(packageName);
                 }
+                LiangApp app = new LiangApp();
+                app.setPackageName("com.google.android.packageinstaller");
+                app.setLock(true);
+                app.save();
                 SharedPreferences.Editor editor = mPreferences.edit();
                 editor.putBoolean(FIRST_LOAD, false)
                         .apply();

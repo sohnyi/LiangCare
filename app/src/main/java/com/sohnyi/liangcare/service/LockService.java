@@ -4,8 +4,10 @@ import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -15,6 +17,7 @@ import android.text.TextUtils;
 import com.sohnyi.liangcare.AppLockActivity;
 import com.sohnyi.liangcare.R;
 import com.sohnyi.liangcare.database.LiangApp;
+import com.sohnyi.liangcare.ui.LoginActivity;
 import com.sohnyi.liangcare.utils.AppsUsage;
 import com.sohnyi.liangcare.utils.LogUtil;
 
@@ -29,12 +32,13 @@ import java.util.List;
 public class LockService extends Service {
     private static final String TAG = "LockService";
     private static final int SERVICE_NOTIFICATION_ID = 1;
-    public static final String UNLOCK_ACTION = "com.sohnyi.liang.unlock";
+    public static final String UNLOCK_ACTION = "UNLOCK_ACTION";
 
+    private ScreenReceiver mServiceReceiver;
+    private static String lastLockPackage;
     private ActivityManager mActivityManager;
     private SharedPreferences mPreferences;
 
-    private boolean isLock;
 
     public LockService() {
     }
@@ -54,6 +58,15 @@ public class LockService extends Service {
 
         mActivityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        lastLockPackage = "";
+
+        //注册广播
+        mServiceReceiver = new ScreenReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(UNLOCK_ACTION);
+        registerReceiver(mServiceReceiver, filter);
     }
 
     @Override
@@ -94,26 +107,50 @@ public class LockService extends Service {
         LogUtil.d(TAG, "onStartCommand: notification start foreground");
     }
 
-
     private void checkLockState() {
         while (true) {
             String topPackageName = AppsUsage.getLauncherTopApp(this, mActivityManager);
-
             if (!TextUtils.isEmpty(topPackageName)) {
+                if ((!topPackageName.equals(lastLockPackage)) && (!topPackageName.equals(getPackageName()))
+                        && (!lastLockPackage.equals(""))) {
+                    LogUtil.d(TAG, "set last lock package null.");
+                    LogUtil.d(TAG, "topPackageName:" + topPackageName + ", lastLockPackage:" + lastLockPackage
+                                    + ", getPackageName:" + getPackageName());
+                    lastLockPackage = "";
+                }
                 try {
-                    List<LiangApp> apps = apps = DataSupport.where("packageName = ?", topPackageName)
+                    List<LiangApp> apps = DataSupport.where("packageName = ?", topPackageName)
                             .find(LiangApp.class);
-                    if (apps.size() == 1) {
-                        LiangApp app = apps.get(0);
-                        boolean needLock = app.isLock();
-                        if (needLock) {
-                            LogUtil.d(TAG, "checkLockState: need lock");
-                        }
+                    LiangApp app = apps.get(0);
+                    if (apps.size() == 1 && app.isLock() && !app.getPackageName().equals(lastLockPackage)) {
+                        showLockView(apps.get(0).getPackageName());
+                        LogUtil.d(TAG, "checkLockState: need lock:" + app.getPackageName()
+                                + ", last lock package:" + lastLockPackage);
+                        lastLockPackage = apps.get(0).getPackageName();
+
                     }
                 } catch (Exception e) {
+/*
                     LogUtil.e(TAG, "checkLockState: " + e.getMessage());
+*/
                 }
             }
+        }
+    }
+
+    /*启动锁屏界面*/
+    private void showLockView(String packageName) {
+        Intent intent = LoginActivity.newIntent(this, packageName);
+        startActivity(intent);
+    }
+
+    /*关闭，打开，解锁屏幕广播接收器*/
+    public class ScreenReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
         }
     }
 }

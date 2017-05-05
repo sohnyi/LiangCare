@@ -1,10 +1,14 @@
 package com.sohnyi.liangcare.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,21 +18,26 @@ import android.widget.TextView;
 
 import com.sohnyi.liangcare.AppLockActivity;
 import com.sohnyi.liangcare.R;
+import com.sohnyi.liangcare.utils.LogUtil;
+import com.sohnyi.liangcare.utils.MD5Encoder;
 import com.sohnyi.liangcare.utils.ToastUtil;
-
-import java.security.MessageDigest;
 
 /**
  * Created by sohnyi on 2017/3/11.
  */
 
 public class LoginActivity extends Activity implements View.OnClickListener {
-
     private static final String TAG = "LoginActivity";
+    public static final String EXTRA_PACKAGE_NAME
+            = "com.sohnyi.liangcare.top_packageName";
+
     private boolean confirm = false;
     private String init_pass = null;
 
     private SharedPreferences pref;
+    private PackageManager mManager;
+    private String getExtraPackageName;
+    private Drawable icon;
 
     private ImageView mAppLockIcon;
     private TextView mPassInputShow;
@@ -46,14 +55,30 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private Button mBut0;
     private Button mButOk;
 
+    public static Intent newIntent(Context packageContext, String packageName) {
+        Intent intent = new Intent(packageContext, LoginActivity.class);
+        intent.putExtra(EXTRA_PACKAGE_NAME, packageName);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getExtraPackageName = getIntent().getStringExtra(EXTRA_PACKAGE_NAME);
+        mManager = getPackageManager();
+        if (!TextUtils.isEmpty(getExtraPackageName)) {
+            try {
+                icon = mManager.getApplicationIcon(getExtraPackageName);
+            } catch (PackageManager.NameNotFoundException e) {
+                icon = getDrawable(R.mipmap.ic_launcher);
+                LogUtil.e(TAG, e.getMessage());
+            }
+        }
+
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean is_first_open = pref.getBoolean("appLock_isFirstOpen", true);
-        Log.d(TAG, "onCreate: is first open:" + is_first_open);
 
         initView();
         if (is_first_open) {
@@ -98,6 +123,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.but_ok :
                 String password = pref.getString("appLock_password", "");
+                /*设置密码*/
                 if (password.equals("")) {
                     Log.d(TAG, "onClick: confirm :" + confirm);
                     if (!confirm) {
@@ -116,15 +142,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         if (conf_pass.equals(init_pass)) {
                             try {
                                 Log.d(TAG, "onClick: try to get md5");
-                                MessageDigest digest = MessageDigest.getInstance("MD5");
-                                digest.reset();
-                                digest.update(conf_pass.getBytes());
-                                byte[] bytes = digest.digest();
-                                StringBuffer hexString = new StringBuffer();
-                                for (byte b : bytes) {
-                                    hexString.append(Integer.toHexString(0xFF & b));
-                                }
-                                password = hexString.toString();
+                                password = MD5Encoder.encode(conf_pass);
                                 Log.d(TAG, "onClick: password :" + password);
                                 setPassword(password);
                                 Intent intent = new Intent(LoginActivity.this, AppLockActivity.class);
@@ -134,27 +152,29 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 e.printStackTrace();
                                 Log.d(TAG, "onClick: " + e);
                             }
+                        } else {
+                            confirm = !confirm;
+                            init_pass = null;
+                            ToastUtil.showToast(this, getString(R.string.pass_no_match));
+                            mInputTip.setText(getText(R.string.set_password));
                         }
                     }
 
                 } else {
                     String in_pass = mPassInputShow.getText().toString().trim();
                     try {
-                        MessageDigest digest = MessageDigest.getInstance("MD5");
-                        digest.reset();
-                        digest.update(in_pass.getBytes());
-                        byte[] bytes = digest.digest();
-                        StringBuffer hexString = new StringBuffer();
-                        for (byte b : bytes) {
-                            hexString.append(Integer.toHexString(0xFF & b));
-                        }
-                        in_pass = hexString.toString();
+                        in_pass = MD5Encoder.encode(in_pass);
                         if (in_pass.equals(password)) {
-                            Intent intent = new Intent(LoginActivity.this, AppLockActivity.class);
-                            startActivity(intent);
+                            if (getExtraPackageName.equals(getPackageName())) {
+                                LogUtil.d(TAG, "getPackageName=" + getPackageName());
+                                Intent intent = new Intent(LoginActivity.this, AppLockActivity.class);
+                                startActivity(intent);
+                            }
                             this.finish();
                         } else {
                             ToastUtil.showToast(getApplicationContext(), R.string.wrong_pass);
+                            LogUtil.d(TAG, "password:" + password);
+                            LogUtil.d(TAG, "enter" + in_pass);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -191,6 +211,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         mBut8 = (Button) findViewById(R.id.but8);
         mBut9 = (Button) findViewById(R.id.but9);
         mButOk = (Button) findViewById(R.id.but_ok);
+        mAppLockIcon.setImageDrawable(icon);
         mImageButton.setOnClickListener(this);
         mBut0.setOnClickListener(this);
         mBut1.setOnClickListener(this);
@@ -210,6 +231,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         editor.putBoolean("appLock_isFirstOpen", false)
                 .putString("appLock_password", pass)
                 .apply();
+        ToastUtil.showToast(this, getString(R.string.pass_set_suss));
         Log.d(TAG, "setPassword: set is first open value");
+    }
+
+    /*注释原有的返回按键功能*/
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+
     }
 }

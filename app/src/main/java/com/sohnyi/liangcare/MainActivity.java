@@ -18,6 +18,7 @@ import org.litepal.tablemanager.Connector;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
+
     /*权限请求码*/
     private static final int REQUEST_CODE = 0;
     private final String[] PERMISSIONS = new String[] {
@@ -25,12 +26,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
 
-    private SharedPreferences pref;
+    private boolean lockAppList;
+    private boolean lockCab;
 
+    private SharedPreferences pref;
     private CardView mAppLockCad;
     private CardView mSecCabCad;
     private CardView mVirusCad;
-
     private PermissionsChecker mChecker;
 
     @Override
@@ -39,12 +41,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
+        lockAppList = true;
+        lockCab = true;
 
         mAppLockCad = (CardView) findViewById(R.id.app_lock_cardView);
         mSecCabCad = (CardView) findViewById(R.id.sec_cab_cardView);
         mVirusCad = (CardView) findViewById(R.id.virus_scan_cardView);
         mChecker = new PermissionsChecker(this);
-
 
         mAppLockCad.setOnClickListener(this);
         mSecCabCad.setOnClickListener(this);
@@ -65,17 +68,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent;
         switch (v.getId()) {
             case R.id.app_lock_cardView :
-                intent = new Intent(MainActivity.this, LoginActivity.class);
+                if (lockAppList) {
+                    intent = LoginActivity.newIntent(MainActivity.this, getPackageName());
+                } else {
+                    intent = new Intent(MainActivity.this, AppLockActivity.class);
+                }
                 startActivity(intent);
-                com.sohnyi.liangcare.utils.LogUtil.v(TAG , "Start AppLockActivity");
                 break;
             case R.id.sec_cab_cardView:
                 boolean is_first_open = pref.getBoolean("secCab_isFirstOpen", true);
                 com.sohnyi.liangcare.utils.LogUtil.d(TAG, "onClick: is_first_open" + is_first_open);
                 if (is_first_open) {
                     intent = new Intent(MainActivity.this, CreateSecCabActivity.class);
-                } else {
+                } else if (lockCab){
                     intent = new Intent(MainActivity.this, SecCabLogin.class);
+                } else {
+                    intent = new Intent(MainActivity.this, SecCabActivity.class);
                 }
                 startActivity(intent);
                 break;

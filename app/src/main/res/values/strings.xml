@@ -32,7 +32,7 @@
     <string name="storage_location_select">选择存储位置</string>
     <string name="pass_4_16">密码由4-16位数字组成</string>
     <string name="pass_set_suss">密码设置成功</string>
-    <string name="pass_no_match">两次密码不一致</string>
+    <string name="pass_no_match">两次密码不一致, 请重新设置密码</string>
 
     <string name="click_stop">点击停止服务</string>
 

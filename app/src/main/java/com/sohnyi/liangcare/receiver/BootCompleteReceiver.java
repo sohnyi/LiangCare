@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.sohnyi.liangcare.service.LockService;
-import com.sohnyi.liangcare.utils.LogUtil;
-import com.sohnyi.liangcare.utils.ToastUtil;
 
 
 /**
@@ -14,15 +12,10 @@ import com.sohnyi.liangcare.utils.ToastUtil;
  */
 
 public class BootCompleteReceiver extends BroadcastReceiver {
-    private static final String TAG = "BootCompleteReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        ToastUtil.showToast(context, TAG + "boot complete");
         Intent i= LockService.newIntent(context);
         context.startService(i);
-
-
-        LogUtil.d(TAG, "onReceive: ");
     }
 }
