@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.sohnyi.liangcare.utils.ShowToast;
+import com.sohnyi.liangcare.utils.ToastUtil;
 
 /**
  * Created by sohnyi on 2017/4/13.
@@ -21,7 +21,7 @@ public class SecCabFileListActivity extends FragmentActivity {
         setContentView(R.layout.activity_sec_cab_file_list);
 
         int file_type = (int) getIntent().getSerializableExtra(FILE_TYPE);
-        ShowToast.showToast(getApplicationContext(), "file type:" + file_type);
+        ToastUtil.showToast(getApplicationContext(), "file type:" + file_type);
 
         // TODO: 2017/4/13 create a file find util. 
     }

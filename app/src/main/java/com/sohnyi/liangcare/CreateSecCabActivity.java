@@ -8,14 +8,14 @@ import android.preference.PreferenceManager;
 import android.support.annotation.ArrayRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.sohnyi.liangcare.utils.ShowToast;
+import com.sohnyi.liangcare.utils.LogUtil;
+import com.sohnyi.liangcare.utils.ToastUtil;
 
 import java.security.MessageDigest;
 
@@ -55,7 +55,7 @@ public class CreateSecCabActivity extends AppCompatActivity implements View.OnCl
             case R.id.storage_location:
                 Boolean isSDPresent = android.os.Environment.getExternalStorageState()
                         .equals(android.os.Environment.MEDIA_MOUNTED);
-                Log.d(TAG, "onClick: isSDPresent:" + isSDPresent);
+                LogUtil.d(TAG, "onClick: isSDPresent:" + isSDPresent);
                 if (isSDPresent) {
                     mDialog_selectLoca = createSelectDialog(R.array.location_set_items);
                 } else {
@@ -82,7 +82,7 @@ public class CreateSecCabActivity extends AppCompatActivity implements View.OnCl
                             editor.putBoolean("secCab_isFirstOpen", false)
                                     .putString("secCab_password", password)
                                     .apply();
-                            ShowToast.showToast(getApplicationContext(), R.string.pass_set_suss);
+                            ToastUtil.showToast(getApplicationContext(), R.string.pass_set_suss);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -92,10 +92,10 @@ public class CreateSecCabActivity extends AppCompatActivity implements View.OnCl
                         startActivity(intent);
                         this.finish();
                     } else {
-                        ShowToast.showToast(getApplicationContext(), R.string.pass_no_match);
+                        ToastUtil.showToast(getApplicationContext(), R.string.pass_no_match);
                     }
                 } else {
-                    ShowToast.showToast(getApplicationContext(), R.string.min_length_is_4);
+                    ToastUtil.showToast(getApplicationContext(), R.string.min_length_is_4);
                 }
                 break;
             case R.id.cancel_action:

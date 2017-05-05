@@ -3,7 +3,7 @@ package com.sohnyi.liangcare;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.sohnyi.liangcare.utils.ShowToast;
+import com.sohnyi.liangcare.utils.ToastUtil;
 
 public class VirusScanActivity extends AppCompatActivity {
     private static final String TAG = "VirusScanActivity";
@@ -13,6 +13,6 @@ public class VirusScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_virus_scan);
 
-        ShowToast.showToast(this, TAG);
+        ToastUtil.showToast(this, TAG);
     }
 }

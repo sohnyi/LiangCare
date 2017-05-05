@@ -20,7 +20,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,10 +32,9 @@ import com.sohnyi.liangcare.database.LiangApp;
 import com.sohnyi.liangcare.database.LiangAppLab;
 import com.sohnyi.liangcare.service.LockService;
 import com.sohnyi.liangcare.utils.AppsUsage;
+import com.sohnyi.liangcare.utils.LogUtil;
 import com.sohnyi.liangcare.utils.PermissionsChecker;
 import com.sohnyi.liangcare.utils.ServiceUtils;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +51,7 @@ import static com.sohnyi.liangcare.utils.PermissionsActivity.PACKAGE_URL_SCHEME;
 public class AppLockFragment extends Fragment {
 
     private static final String TAG = "AppLockFragment";
-    public static final String HAVE_CHANGED = "haveChanged";
+    public static final String FIRST_LOAD = "firstLoad";
     private static final String LOCK_SERVICE_NAME = "com.sohnyi.liangcare.service.LockService";
 
     private SharedPreferences mPreferences;
@@ -67,6 +65,7 @@ public class AppLockFragment extends Fragment {
     private List<String> mLabels;
     private List<Drawable> mIcons;
     private PackageManager pm;
+    private LiangAppLab mAppLab;
 
     private int mPosition;
 
@@ -80,6 +79,7 @@ public class AppLockFragment extends Fragment {
         mProgressDialog.setCancelable(false);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mChecker = new PermissionsChecker(getActivity());
+        mAppLab = LiangAppLab.get();
 
     }
 
@@ -98,19 +98,17 @@ public class AppLockFragment extends Fragment {
         if (!ServiceUtils.isServiceRunning(getActivity(), LOCK_SERVICE_NAME)) {
             Intent intent = new Intent(getActivity(), LockService.class);
             getActivity().startService(intent);
-            Log.d(TAG, "onCreateView: start service");
+            LogUtil.d(TAG, "onCreateView: start service");
         }
-
         return view;
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (!AppsUsage.isStatAccessPermissionSet(getActivity())) {
-                Log.d(TAG, "onResume: is stat access permission set "
+                LogUtil.d(TAG, "onResume: is stat access permission set "
                         + AppsUsage.isStatAccessPermissionSet(getActivity()));
                 if (AppsUsage.isNoOption(getActivity())) {
                     if (mAlertDialog == null) {
@@ -126,9 +124,9 @@ public class AppLockFragment extends Fragment {
     }
 
     private void updateUI() {
-        boolean have_changed = mPreferences.getBoolean(HAVE_CHANGED, true);
-        Log.d(TAG, "updateUI: have changed=" + have_changed);
-        if (have_changed) {
+        boolean first_load = mPreferences.getBoolean(FIRST_LOAD, true);
+        LogUtil.d(TAG, "updateUI: first load=" + first_load);
+        if (first_load) {
             new InitAppInfo().execute();
         }
 
@@ -136,7 +134,6 @@ public class AppLockFragment extends Fragment {
         mIcons = new ArrayList<>();
         new InitData().execute();
     }
-
 
     private class AppLockHolder extends RecyclerView.ViewHolder {
         private String mLabel;
@@ -160,7 +157,6 @@ public class AppLockFragment extends Fragment {
             mSwitch.setChecked(lock);
         }
     }
-
 
     private class AppLockAdapter extends RecyclerView.Adapter<AppLockHolder> {
         private List<LiangApp> mApps;
@@ -188,10 +184,10 @@ public class AppLockFragment extends Fragment {
                                 intent.setData(Uri.parse(PACKAGE_URL_SCHEME + getActivity().getPackageName()));
                                 startActivity(intent);
                             }
-                            Log.d(TAG, "onCheckedChanged: " + app.getPackageName() + " lock");
+                            LogUtil.d(TAG, "onCheckedChanged: " + app.getPackageName() + " lock");
                         } else {
                             app.setLock(false);
-                            Log.d(TAG, "onCheckedChanged: " + app.getPackageName() + " unlock");
+                            LogUtil.d(TAG, "onCheckedChanged: " + app.getPackageName() + " unlock");
                         }
                         app.save();
                     }
@@ -222,6 +218,7 @@ public class AppLockFragment extends Fragment {
 
     }
 
+    /*获取应用列表信息*/
     private class InitData extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected void onPreExecute() {
@@ -231,27 +228,23 @@ public class AppLockFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            LiangAppLab appLab = LiangAppLab.get();
-            mLiangApps = appLab.getApps();
-            Log.d(TAG, "init data doInBackground: liang app size=" + mLiangApps.size());
+            mLiangApps = mAppLab.getApps();
+            LogUtil.d(TAG, "init data doInBackground: liang app size=" + mLiangApps.size());
             for (LiangApp app : mLiangApps) {
                 try {
                     mLabels.add(pm.getApplicationLabel(pm.getApplicationInfo(
                             app.getPackageName(), PackageManager.GET_META_DATA)).toString());
                     mIcons.add(pm.getApplicationIcon(app.getPackageName()));
                 } catch (PackageManager.NameNotFoundException e) {
-                    Log.e(TAG, "updateUI: " + e.getMessage());
+                    LogUtil.e(TAG, "updateUI: " + e.getMessage());
                     return false;
                 }
             }
             if ((mLiangApps.size() == mLabels.size()) && (mLiangApps.size() == mIcons.size())) {
-                Log.d(TAG, "doInBackground: liang app size =" + mLiangApps.size());
+                LogUtil.d(TAG, "doInBackground: liang app size =" + mLiangApps.size());
             } else {
-                SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                boolean h_c = p.getBoolean(HAVE_CHANGED, true);
-                Log.e(TAG, "doInBackground: init data error");
-                Log.e(TAG, "doInBackground: have changed " + h_c);
-                Log.e(TAG, "doInBackground:" + ", label size=" + mLabels.size()
+                LogUtil.e(TAG, "doInBackground: init data error");
+                LogUtil.e(TAG, "doInBackground:" + ", label size=" + mLabels.size()
                         + ", icon size = " + mIcons.size());
             }
             return true;
@@ -271,22 +264,18 @@ public class AppLockFragment extends Fragment {
         }
     }
 
+    /*首次打开，初始化应用信息并保存到数据库*/
     private class InitAppInfo extends AsyncTask<Void, Void, Boolean> {
         PackageManager packageManager = getActivity().getPackageManager();
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
             mProgressDialog.show();
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            List<LiangApp> apps = DataSupport.findAll(LiangApp.class);
-            if (apps.size() > 0) {
-                DataSupport.deleteAll(LiangApp.class);
-            }
             try {
                 Intent startupIntent = new Intent(Intent.ACTION_MAIN);
                 startupIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -301,19 +290,13 @@ public class AppLockFragment extends Fragment {
                     }
                 });
                 for (ResolveInfo info : resolveInfos) {
-                    LiangApp liangApp = new LiangApp();
                     String packageName = info.activityInfo.packageName;
-
-                    liangApp.setPackageName(packageName);
-                    liangApp.setLock(false);
-                    liangApp.setPassword(null);
-                    liangApp.setInpass(false);
-                    liangApp.save();
+                    mAppLab.addApp(packageName);
                 }
                 SharedPreferences.Editor editor = mPreferences.edit();
-                editor.putBoolean(HAVE_CHANGED, false)
+                editor.putBoolean(FIRST_LOAD, false)
                         .apply();
-                Log.d(TAG, "doInBackground: init app info data saved");
+                LogUtil.d(TAG, "doInBackground: init app info data saved");
                 return true;
             } catch (Exception e) {
                 return false;
@@ -329,6 +312,7 @@ public class AppLockFragment extends Fragment {
 
     }
 
+    /*获取查看应用信息权限*/
     private void getUsageAccessDialog() {
         final int MY_DIALOG_THEME = R.style.myAlertDialog;
         final Context context = getActivity();

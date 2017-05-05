@@ -39,7 +39,7 @@ public class PermissionsChecker {
                     return true;
                 }
             } catch (Exception e) {
-                Log.e(TAG, "canDrawOverlays: " + e.getMessage());
+                LogUtil.e(TAG, "canDrawOverlays: " + e.getMessage());
             }
         }
         return false;

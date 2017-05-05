@@ -22,7 +22,7 @@ public class ServiceUtils {
         for (ActivityManager.RunningServiceInfo info : serviceInfos) {
             String name = info.service.getClassName();
             if (serviceName.equals(name)) {
-                Log.d(TAG, "isServiceRunning: service name" + name);
+                LogUtil.d(TAG, "isServiceRunning: service name" + name);
                 return true;
             }
         }

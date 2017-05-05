@@ -3,10 +3,10 @@ package com.sohnyi.liangcare.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.sohnyi.liangcare.service.LockService;
-import com.sohnyi.liangcare.utils.ShowToast;
+import com.sohnyi.liangcare.utils.LogUtil;
+import com.sohnyi.liangcare.utils.ToastUtil;
 
 
 /**
@@ -18,11 +18,11 @@ public class BootCompleteReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        ShowToast.showToast(context, TAG + "boot complete");
+        ToastUtil.showToast(context, TAG + "boot complete");
         Intent i= LockService.newIntent(context);
         context.startService(i);
 
 
-        Log.d(TAG, "onReceive: ");
+        LogUtil.d(TAG, "onReceive: ");
     }
 }

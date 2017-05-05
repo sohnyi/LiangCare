@@ -18,7 +18,7 @@ public class GetIconBySystem {
             Drawable icon =pm.getApplicationIcon(packageName);
             return icon;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.d(TAG, "getIconBySystem: " + e.getMessage());
+            LogUtil.d(TAG, "getIconBySystem: " + e.getMessage());
         }
         return null;
     }

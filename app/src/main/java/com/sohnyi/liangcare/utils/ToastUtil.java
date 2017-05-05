@@ -6,7 +6,7 @@ import android.widget.Toast;
 /**
  * Created by Ziyi on 2016/7/28.
  */
-public class ShowToast {
+public class ToastUtil {
     private static Toast mToast;
 
     public static void showToast(Context context, String s) {

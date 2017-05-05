@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.sohnyi.liangcare.AppLockActivity;
 import com.sohnyi.liangcare.R;
-import com.sohnyi.liangcare.utils.ShowToast;
+import com.sohnyi.liangcare.utils.ToastUtil;
 
 import java.security.MessageDigest;
 
@@ -106,7 +106,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             confirm = !confirm;
                             mInputTip.setText(R.string.confirm_password);
                         } else {
-                            ShowToast.showToast(getApplicationContext(),
+                            ToastUtil.showToast(getApplicationContext(),
                                     getString(R.string.min_length_is_4));
                         }
                     } else {
@@ -154,7 +154,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             startActivity(intent);
                             this.finish();
                         } else {
-                            ShowToast.showToast(getApplicationContext(), R.string.wrong_pass);
+                            ToastUtil.showToast(getApplicationContext(), R.string.wrong_pass);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

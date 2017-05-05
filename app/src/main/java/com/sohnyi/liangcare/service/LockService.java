@@ -11,12 +11,12 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.sohnyi.liangcare.AppLockActivity;
 import com.sohnyi.liangcare.R;
 import com.sohnyi.liangcare.database.LiangApp;
 import com.sohnyi.liangcare.utils.AppsUsage;
+import com.sohnyi.liangcare.utils.LogUtil;
 
 import org.litepal.crud.DataSupport;
 
@@ -76,7 +76,7 @@ public class LockService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopForeground(true);
-        Log.d(TAG, "onDestroy: onDestroy executed");
+        LogUtil.d(TAG, "onDestroy: onDestroy executed");
     }
 
     private void showNotification(String title, String message) {
@@ -91,7 +91,7 @@ public class LockService extends Service {
                 .setContentIntent(pi)
                 .build();
         startForeground(SERVICE_NOTIFICATION_ID, notification);
-        Log.d(TAG, "onStartCommand: notification start foreground");
+        LogUtil.d(TAG, "onStartCommand: notification start foreground");
     }
 
 
@@ -107,16 +107,13 @@ public class LockService extends Service {
                         LiangApp app = apps.get(0);
                         boolean needLock = app.isLock();
                         if (needLock) {
-                            Log.d(TAG, "checkLockState: need lock");
+                            LogUtil.d(TAG, "checkLockState: need lock");
                         }
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "checkLockState: " + e.getMessage());
+                    LogUtil.e(TAG, "checkLockState: " + e.getMessage());
                 }
             }
-
-
         }
     }
-
 }

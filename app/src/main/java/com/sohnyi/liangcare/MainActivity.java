@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.View;
 
 import com.sohnyi.liangcare.ui.LoginActivity;
@@ -68,11 +67,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.app_lock_cardView :
                 intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
-                Log.d(TAG , "Start AppLockActivity");
+                com.sohnyi.liangcare.utils.LogUtil.v(TAG , "Start AppLockActivity");
                 break;
             case R.id.sec_cab_cardView:
                 boolean is_first_open = pref.getBoolean("secCab_isFirstOpen", true);
-                Log.d(TAG, "onClick: is_first_open" + is_first_open);
+                com.sohnyi.liangcare.utils.LogUtil.d(TAG, "onClick: is_first_open" + is_first_open);
                 if (is_first_open) {
                     intent = new Intent(MainActivity.this, CreateSecCabActivity.class);
                 } else {
