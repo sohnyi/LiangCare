@@ -2,9 +2,13 @@
 <litepal>
     <dbname value="Care" ></dbname>
 
-    <version value="1" ></version>
+    <version value="2" ></version>
 
     <list>
         <mapping class="com.sohnyi.liangcare.database.LiangApp"></mapping>
+        <mapping class="com.sohnyi.liangcare.database.LiangAudio"></mapping>
+        <mapping class="com.sohnyi.liangcare.database.LiangVideo"></mapping>
+        <mapping class="com.sohnyi.liangcare.database.LiangPhoto"></mapping>
+        <mapping class="com.sohnyi.liangcare.database.LiangDoc"></mapping>
     </list>
 </litepal>

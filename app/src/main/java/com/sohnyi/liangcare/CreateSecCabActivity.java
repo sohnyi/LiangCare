@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sohnyi.liangcare.utils.LogUtil;
+import com.sohnyi.liangcare.utils.SecCabActivity;
 import com.sohnyi.liangcare.utils.ToastUtil;
 
 import java.security.MessageDigest;

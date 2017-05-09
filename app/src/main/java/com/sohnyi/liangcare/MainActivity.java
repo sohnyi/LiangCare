@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.sohnyi.liangcare.ui.LoginActivity;
 import com.sohnyi.liangcare.ui.SecCabLogin;
 import com.sohnyi.liangcare.utils.PermissionsActivity;
 import com.sohnyi.liangcare.utils.PermissionsChecker;
+import com.sohnyi.liangcare.utils.SecCabActivity;
 
 import org.litepal.tablemanager.Connector;
 
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CardView mAppLockCad;
     private CardView mSecCabCad;
     private CardView mVirusCad;
+    private Toolbar mToolbar;
+
     private PermissionsChecker mChecker;
 
     @Override
@@ -44,14 +48,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lockAppList = true;
         lockCab = true;
 
+
         mAppLockCad = (CardView) findViewById(R.id.app_lock_cardView);
         mSecCabCad = (CardView) findViewById(R.id.sec_cab_cardView);
         mVirusCad = (CardView) findViewById(R.id.virus_scan_cardView);
         mChecker = new PermissionsChecker(this);
-
         mAppLockCad.setOnClickListener(this);
         mSecCabCad.setOnClickListener(this);
         mVirusCad.setOnClickListener(this);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
         Connector.getDatabase();
     }
 

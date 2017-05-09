@@ -25,6 +25,8 @@ import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 /**
  * Created by sohnyi on 2017/4/19.
  */
@@ -110,7 +112,11 @@ public class LockService extends Service {
     private void checkLockState() {
         while (true) {
             String topPackageName = AppsUsage.getLauncherTopApp(this, mActivityManager);
+
             if (!TextUtils.isEmpty(topPackageName)) {
+                if (topPackageName.equals("com.tencent.mobileqq")) {
+                    LogUtil.d(TAG, "need lock com.tencent.mobileqq");
+                }
                 if ((!topPackageName.equals(lastLockPackage)) && (!topPackageName.equals(getPackageName()))
                         && (!lastLockPackage.equals(""))) {
                     LogUtil.d(TAG, "set last lock package null.");
@@ -126,13 +132,12 @@ public class LockService extends Service {
                         showLockView(apps.get(0).getPackageName());
                         LogUtil.d(TAG, "checkLockState: need lock:" + app.getPackageName()
                                 + ", last lock package:" + lastLockPackage);
+
                         lastLockPackage = apps.get(0).getPackageName();
 
                     }
                 } catch (Exception e) {
-/*
-                    LogUtil.e(TAG, "checkLockState: " + e.getMessage());
-*/
+//                    LogUtil.e(TAG, "checkLockState: " + e.getMessage());
                 }
             }
         }
@@ -141,6 +146,7 @@ public class LockService extends Service {
     /*启动锁屏界面*/
     private void showLockView(String packageName) {
         Intent intent = LoginActivity.newIntent(this, packageName);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -150,7 +156,9 @@ public class LockService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-
+            if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                lastLockPackage = "";
+            }
         }
     }
 }

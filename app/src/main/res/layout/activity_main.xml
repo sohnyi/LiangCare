@@ -7,12 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="@dimen/dimen_4"
-    android:paddingBottom="@dimen/dimen_4"
-    android:paddingLeft="@dimen/dimen_8"
-    android:paddingRight="@dimen/dimen_8"
-    android:background="@color/colorPrimary"
     tools:context="com.sohnyi.liangcare.MainActivity">
+
+    <include layout="@layout/toolbar_layout" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dimen_4"
+        android:paddingBottom="@dimen/dimen_4"
+        android:paddingLeft="@dimen/dimen_8"
+        android:paddingRight="@dimen/dimen_8">
 
     <android.support.v7.widget.CardView
         android:id="@+id/app_lock_cardView"
@@ -115,6 +121,8 @@
 
 
     </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -14,6 +14,7 @@
     <string name="request_text">当前应用缺少必要权限</string>
     <string name="quit">退出</string>
     <string name="settings">设置</string>
+    <string name="search">搜索</string>
 
     <string name="app_count_text">未上锁应用%1$d个</string>
     <string name="app_installed">已安装应用</string>
@@ -40,7 +41,7 @@
     <string name="cancel">取消</string>
 
     <string name="photo">图片</string>
-    <string name="document">文件</string>
+    <string name="document">文档</string>
     <string name="video">视频</string>
     <string name="audio">音频</string>
 
@@ -66,4 +67,5 @@
     <string name="eight">8</string>
     <string name="nine">9</string>
     <string name="check_mark">✓</string>
+    <string name="title_activity_sec_cab">SecCabActivity</string>
 </resources>

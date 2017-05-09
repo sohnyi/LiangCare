@@ -23,7 +23,7 @@ public class AppsUsage {
 
     public static String getLauncherTopApp(Context context, ActivityManager activityManager) {
 
-        if (Build.VERSION.SDK_INT < 22) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             List<ActivityManager.RunningTaskInfo> appTasks = activityManager.getRunningTasks(1);
             if (null != appTasks && !appTasks.isEmpty()) {
                 return appTasks.get(0).topActivity.getPackageName();

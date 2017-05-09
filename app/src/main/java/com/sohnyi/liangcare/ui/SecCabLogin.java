@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sohnyi.liangcare.R;
-import com.sohnyi.liangcare.SecCabActivity;
 import com.sohnyi.liangcare.utils.FindPassActivity;
+import com.sohnyi.liangcare.utils.SecCabActivity;
 
 import java.security.MessageDigest;
 
@@ -38,8 +38,7 @@ public class SecCabLogin extends AppCompatActivity implements View.OnClickListen
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-                                        |WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @Override

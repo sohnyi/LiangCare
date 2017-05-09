@@ -38,6 +38,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private PackageManager mManager;
     private String getExtraPackageName;
     private Drawable icon;
+    private String selfPackageName;
 
     private ImageView mAppLockIcon;
     private TextView mPassInputShow;
@@ -77,6 +78,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             }
         }
 
+        selfPackageName = getPackageName();
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean is_first_open = pref.getBoolean("appLock_isFirstOpen", true);
 
@@ -235,10 +237,19 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         Log.d(TAG, "setPassword: set is first open value");
     }
 
-    /*注释原有的返回按键功能*/
+    /*重写返回键事件监听*/
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
-
+        /*本应用内实现原有返回功能*/
+        if (getExtraPackageName.equals(selfPackageName)) {
+            super.onBackPressed();
+        } else {
+            /*返回键实现Home键功能*/
+            Intent intent = new Intent(Intent.ACTION_MAIN)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+            finish();
+        }
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_audio"
+        android:icon="@drawable/ic_queue_music_black_24dp"
+        android:title="@string/audio"/>
+
+    <item
+        android:id="@+id/navigation_video"
+        android:icon="@drawable/ic_video_library_grey_500_24dp"
+        android:title="@string/video"/>
+
+    <item
+        android:id="@+id/navigation_photo"
+        android:icon="@drawable/ic_photo_blue_grey_500_24dp"
+        android:title="@string/photo"/>
+
+    <item
+        android:id="@+id/navigation_document"
+        android:icon="@drawable/ic_insert_drive_file_grey_500_24dp"
+        android:title="@string/document"/>
+
+</menu>

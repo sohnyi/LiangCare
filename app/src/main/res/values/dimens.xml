@@ -3,13 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <style name="TranslucentTheme" parent="android:Theme.Material.Wallpaper.NoTitleBar">
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-
+    <dimen name="toolbar_padding_top">25dp</dimen>
 
 
     <dimen name="dimen_4">4dp</dimen>
@@ -18,6 +12,8 @@
     <dimen name="dimen_32">32dp</dimen>
     <dimen name="dimen_64">64dp</dimen>
     <dimen name="dimen_96">96dp</dimen>
+
+
     <dimen name="pass_button_size">60dp</dimen>
     <dimen name="stroke_width">2dp</dimen>
     <dimen name="but_press_size">100dp</dimen>

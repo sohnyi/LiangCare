@@ -28,7 +28,7 @@ public class LiangAppLab {
 
     /*获取所有数据*/
     public List<LiangApp> getApps() {
-        return DataSupport.findAll(LiangApp.class);
+        return DataSupport.order("isLock").find(LiangApp.class);
     }
 
     /*添加数据*/
