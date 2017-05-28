@@ -91,7 +91,7 @@ public class LockService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopForeground(true);
-        LogUtil.d(TAG, "onDestroy: onDestroy executed");
+        LogUtil.i(TAG, "onDestroy: onDestroy executed");
     }
 
     private void showNotification(String title, String message) {
@@ -106,7 +106,7 @@ public class LockService extends Service {
                 .setContentIntent(pi)
                 .build();
         startForeground(SERVICE_NOTIFICATION_ID, notification);
-        LogUtil.d(TAG, "onStartCommand: notification start foreground");
+        LogUtil.i(TAG, "onStartCommand: notification start foreground");
     }
 
     private void checkLockState() {
@@ -115,12 +115,12 @@ public class LockService extends Service {
 
             if (!TextUtils.isEmpty(topPackageName)) {
                 if (topPackageName.equals("com.tencent.mobileqq")) {
-                    LogUtil.d(TAG, "need lock com.tencent.mobileqq");
+                    LogUtil.i(TAG, "need lock com.tencent.mobileqq");
                 }
                 if ((!topPackageName.equals(lastLockPackage)) && (!topPackageName.equals(getPackageName()))
                         && (!lastLockPackage.equals(""))) {
-                    LogUtil.d(TAG, "set last lock package null.");
-                    LogUtil.d(TAG, "topPackageName:" + topPackageName + ", lastLockPackage:" + lastLockPackage
+                    LogUtil.i(TAG, "set last lock package null.");
+                    LogUtil.i(TAG, "topPackageName:" + topPackageName + ", lastLockPackage:" + lastLockPackage
                                     + ", getPackageName:" + getPackageName());
                     lastLockPackage = "";
                 }
@@ -130,7 +130,7 @@ public class LockService extends Service {
                     LiangApp app = apps.get(0);
                     if (apps.size() == 1 && app.isLock() && !app.getPackageName().equals(lastLockPackage)) {
                         showLockView(apps.get(0).getPackageName());
-                        LogUtil.d(TAG, "checkLockState: need lock:" + app.getPackageName()
+                        LogUtil.i(TAG, "checkLockState: need lock:" + app.getPackageName()
                                 + ", last lock package:" + lastLockPackage);
 
                         lastLockPackage = apps.get(0).getPackageName();
@@ -152,7 +152,6 @@ public class LockService extends Service {
 
     /*关闭，打开，解锁屏幕广播接收器*/
     public class ScreenReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();

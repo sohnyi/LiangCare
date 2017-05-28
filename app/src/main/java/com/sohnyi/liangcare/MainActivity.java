@@ -14,7 +14,6 @@ import com.sohnyi.liangcare.ui.LoginActivity;
 import com.sohnyi.liangcare.ui.SecCabLogin;
 import com.sohnyi.liangcare.utils.PermissionsActivity;
 import com.sohnyi.liangcare.utils.PermissionsChecker;
-import com.sohnyi.liangcare.utils.SecCabActivity;
 
 import org.litepal.tablemanager.Connector;
 
@@ -32,9 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean lockCab;
 
     private SharedPreferences pref;
-    private CardView mAppLockCad;
-    private CardView mSecCabCad;
-    private CardView mVirusCad;
+    private CardView mAppLockCard;
+    private CardView mSecCabCard;
     private Toolbar mToolbar;
 
     private PermissionsChecker mChecker;
@@ -49,18 +47,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lockCab = true;
 
 
-        mAppLockCad = (CardView) findViewById(R.id.app_lock_cardView);
-        mSecCabCad = (CardView) findViewById(R.id.sec_cab_cardView);
-        mVirusCad = (CardView) findViewById(R.id.virus_scan_cardView);
+        mAppLockCard = (CardView) findViewById(R.id.app_lock_cardView);
+        mSecCabCard = (CardView) findViewById(R.id.sec_cab_cardView);
         mChecker = new PermissionsChecker(this);
-        mAppLockCad.setOnClickListener(this);
-        mSecCabCad.setOnClickListener(this);
-        mVirusCad.setOnClickListener(this);
+        mAppLockCard.setOnClickListener(this);
+        mSecCabCard.setOnClickListener(this);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-
         Connector.getDatabase();
+
     }
 
     @Override
@@ -77,26 +73,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.app_lock_cardView :
                 if (lockAppList) {
-                    intent = LoginActivity.newIntent(MainActivity.this, getPackageName());
+                    /*应用退出后首次打开转入登录界面*/
+                    intent = LoginActivity.newIntent(MainActivity.this,
+                            getPackageName());
                 } else {
-                    intent = new Intent(MainActivity.this, AppLockActivity.class);
+                    /*应用未退出直接转入应用锁界面*/
+                    intent = new Intent(MainActivity.this,
+                            AppLockActivity.class);
                 }
                 startActivity(intent);
                 break;
             case R.id.sec_cab_cardView:
-                boolean is_first_open = pref.getBoolean("secCab_isFirstOpen", true);
-                com.sohnyi.liangcare.utils.LogUtil.d(TAG, "onClick: is_first_open" + is_first_open);
+                boolean is_first_open = pref
+                        .getBoolean("secCab_isFirstOpen", true);
+                com.sohnyi.liangcare.utils.LogUtil.d(TAG,
+                        "onClick: is_first_open" + is_first_open);
+                /*判断是否首次打开*/
                 if (is_first_open) {
-                    intent = new Intent(MainActivity.this, CreateSecCabActivity.class);
+                    /*转入创建文件保密柜的界面*/
+                    intent = new Intent(MainActivity.this,
+                            CreateSecCabActivity.class);
                 } else if (lockCab){
-                    intent = new Intent(MainActivity.this, SecCabLogin.class);
+                    /*转入文件保密柜登录界面*/
+                    intent = new Intent(MainActivity.this,
+                            SecCabLogin.class);
                 } else {
-                    intent = new Intent(MainActivity.this, SecCabActivity.class);
+                    /*应用未退出直接转入文件加密柜界面*/
+                    intent = new Intent(MainActivity.this,
+                            SecCabActivity.class);
                 }
-                startActivity(intent);
-                break;
-            case R.id.virus_scan_cardView:
-                intent = new Intent(MainActivity.this, VirusScanActivity.class);
                 startActivity(intent);
                 break;
             default:

@@ -6,6 +6,8 @@ import android.content.Intent;
 
 import com.sohnyi.liangcare.database.LiangAppLab;
 
+import static com.sohnyi.liangcare.database.MyConstant.MYPACKAGENAME;
+
 /**
  * Created by sohnyi on 2017/4/19.
  */
@@ -24,10 +26,14 @@ public class PackageReceiver extends BroadcastReceiver {
 
         String packageName = intent.getDataString().substring(8);
         if (intent.getAction().equals(ACTION_PACKAGE_ADDED)) {
-            mAppLab.addApp(packageName);
+            if (!packageName.equals(MYPACKAGENAME)) {
+                mAppLab.addApp(packageName);
+            }
         } else if (intent.getAction().equals(ACTION_PACKAGE_REMOVED)
                 || intent.getAction().equals(ACTION_PACKAGE_FULLY_REMOVED)) {
-            mAppLab.deleteApp(packageName);
+            if (!packageName.equals(MYPACKAGENAME)) {
+                mAppLab.deleteApp(packageName);
+            }
         }
     }
 }

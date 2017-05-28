@@ -7,38 +7,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.sohnyi.liangcare.utils.SecCabActivity">
+    tools:context="com.sohnyi.liangcare.SecCabActivity">
 
-    <FrameLayout
-        android:id="@+id/content"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <android.support.design.widget.CoordinatorLayout
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-            <include layout="@layout/toolbar_layout" />
+            <include layout="@layout/toolbar_layout"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        </android.support.design.widget.AppBarLayout>
 
-            </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/file_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/dimen_16"
-                android:src="@drawable/ic_add_white_24dp"
-                android:backgroundTint="@android:color/holo_red_light"
-                android:tintMode="add"/>
+        </android.support.v7.widget.RecyclerView>
 
-        </android.support.design.widget.CoordinatorLayout>
+        <TextView
+            android:id="@+id/noData_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_data"
+            android:textColor="@color/grey_600"
+            android:layout_gravity="center"
+            android:gravity="center"/>
 
-    </FrameLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/dimen_16"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:src="@drawable/ic_add_white_24dp"
+            android:tintMode="add"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.sohnyi.liangcare.R;
 import com.sohnyi.liangcare.utils.FindPassActivity;
-import com.sohnyi.liangcare.utils.SecCabActivity;
+import com.sohnyi.liangcare.SecCabActivity;
 
 import java.security.MessageDigest;
 

@@ -13,12 +13,12 @@
 
     <item
         android:id="@+id/navigation_photo"
-        android:icon="@drawable/ic_photo_blue_grey_500_24dp"
+        android:icon="@drawable/ic_image_red_500_24dp"
         android:title="@string/photo"/>
 
     <item
         android:id="@+id/navigation_document"
-        android:icon="@drawable/ic_insert_drive_file_grey_500_24dp"
-        android:title="@string/document"/>
+        android:icon="@drawable/ic_insert_drive_file_red_500_24dp"
+        android:title="@string/document" />
 
 </menu>

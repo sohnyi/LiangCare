@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.sohnyi.liangcare.AppLockActivity;
 import com.sohnyi.liangcare.R;
 import com.sohnyi.liangcare.utils.LogUtil;
-import com.sohnyi.liangcare.utils.MD5Encoder;
+import com.sohnyi.liangcare.utils.Encoder;
 import com.sohnyi.liangcare.utils.ToastUtil;
 
 /**
@@ -56,8 +56,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private Button mBut0;
     private Button mButOk;
 
-    public static Intent newIntent(Context packageContext, String packageName) {
-        Intent intent = new Intent(packageContext, LoginActivity.class);
+    public static Intent newIntent(Context packageContext,
+                                   String packageName) {
+        Intent intent = new Intent(packageContext,
+                LoginActivity.class);
         intent.putExtra(EXTRA_PACKAGE_NAME, packageName);
         return intent;
     }
@@ -80,7 +82,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         selfPackageName = getPackageName();
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean is_first_open = pref.getBoolean("appLock_isFirstOpen", true);
+        boolean is_first_open = pref.getBoolean("appLock_isFirstOpen",
+                true);
 
         initView();
         if (is_first_open) {
@@ -93,6 +96,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            /*数字键盘按钮*/
             case R.id.but0 :
                 mPassInputShow.append("0");
                 break;
@@ -127,7 +131,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 String password = pref.getString("appLock_password", "");
                 /*设置密码*/
                 if (password.equals("")) {
-                    Log.d(TAG, "onClick: confirm :" + confirm);
+                    Log.d(TAG, "onClick: confirm: " + confirm);
                     if (!confirm) {
                          init_pass = mPassInputShow.getText().toString().trim();
                         if (init_pass.length() >= 4) {
@@ -139,13 +143,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         }
                     } else {
                        String conf_pass = mPassInputShow.getText().toString().trim();
-                        Log.d(TAG, "onClick: init_pass is " + init_pass);
-                        Log.d(TAG, "onClick: conf_pass is " + conf_pass);
+                        Log.d(TAG, "onClick: init_pass: " + init_pass);
+                        Log.d(TAG, "onClick: conf_pass: " + conf_pass);
                         if (conf_pass.equals(init_pass)) {
                             try {
                                 Log.d(TAG, "onClick: try to get md5");
-                                password = MD5Encoder.encode(conf_pass);
-                                Log.d(TAG, "onClick: password :" + password);
+                                password = Encoder.md5Encode(conf_pass);
+                                Log.d(TAG, "onClick: password: " + password);
                                 setPassword(password);
                                 Intent intent = new Intent(LoginActivity.this, AppLockActivity.class);
                                 startActivity(intent);
@@ -165,7 +169,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 } else {
                     String in_pass = mPassInputShow.getText().toString().trim();
                     try {
-                        in_pass = MD5Encoder.encode(in_pass);
+                        in_pass = Encoder.md5Encode(in_pass);
                         if (in_pass.equals(password)) {
                             if (getExtraPackageName.equals(getPackageName())) {
                                 LogUtil.d(TAG, "getPackageName=" + getPackageName());
@@ -175,9 +179,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             this.finish();
                         } else {
                             ToastUtil.showToast(getApplicationContext(), R.string.wrong_pass);
-                            LogUtil.d(TAG, "password:" + password);
-                            LogUtil.d(TAG, "enter" + in_pass);
                         }
+                        LogUtil.d(TAG, "password: " + password);
+                        LogUtil.d(TAG, "enter: " + in_pass);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

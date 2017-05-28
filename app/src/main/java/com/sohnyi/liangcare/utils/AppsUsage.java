@@ -22,13 +22,6 @@ import java.util.List;
 public class AppsUsage {
 
     public static String getLauncherTopApp(Context context, ActivityManager activityManager) {
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            List<ActivityManager.RunningTaskInfo> appTasks = activityManager.getRunningTasks(1);
-            if (null != appTasks && !appTasks.isEmpty()) {
-                return appTasks.get(0).topActivity.getPackageName();
-            }
-        } else {
             //5.0以后需要用这方法
             UsageStatsManager sUsageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
             long endTime = System.currentTimeMillis();
@@ -45,7 +38,6 @@ public class AppsUsage {
             if (!android.text.TextUtils.isEmpty(result)) {
                 return result;
             }
-        }
         return null;
     }
 

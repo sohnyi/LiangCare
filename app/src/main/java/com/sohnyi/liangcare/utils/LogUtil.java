@@ -46,4 +46,10 @@ public class LogUtil {
         }
     }
 
+    public static void e(String tag, String msg, Exception e) {
+        if (level <= VERBOSE) {
+            Log.e(tag, msg, e);
+        }
+    }
+
 }

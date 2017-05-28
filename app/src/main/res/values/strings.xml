@@ -34,8 +34,10 @@
     <string name="pass_4_16">密码由4-16位数字组成</string>
     <string name="pass_set_suss">密码设置成功</string>
     <string name="pass_no_match">两次密码不一致, 请重新设置密码</string>
+    <string name="encrypting">正在加密</string>
 
     <string name="click_stop">点击停止服务</string>
+    <string name="no_data">暂无数据</string>
 
     <string name="done">完成</string>
     <string name="cancel">取消</string>
@@ -44,6 +46,7 @@
     <string name="document">文档</string>
     <string name="video">视频</string>
     <string name="audio">音频</string>
+    <string name="file_icon">文件图标</string>
 
     <string name="num_0">0</string>
 

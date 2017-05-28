@@ -33,27 +33,38 @@ public class LiangAppLab {
 
     /*添加数据*/
     public void addApp(String packageName) {
-        LiangApp app = new LiangApp();
-        app.setPackageName(packageName);
-        app.setLock(false);
-        app.setInpass(false);
-        app.setPassword(null);
-        app.save();
-        LogUtil.d(TAG, "addApp: " + packageName);
+        LiangApp app = getApp(packageName);
+        if (app == null) {
+            app = new LiangApp();
+            app.setPackageName(packageName);
+            app.setLock(false);
+            app.setInpass(false);
+            app.setPassword(null);
+            app.save();
+            LogUtil.d(TAG, "addApp: " + packageName);
+        }
     }
 
     /*删除数据*/
     public void deleteApp(String packageName) {
-        List<LiangApp> apps = DataSupport.where("packageName = ?", packageName)
-                .find(LiangApp.class);
-        if (apps.size() == 1) {
+        LiangApp app = getApp(packageName);
+        if (app != null) {
             try {
-                DataSupport.delete(LiangApp.class ,apps.get(0).getId());
+                DataSupport.delete(LiangApp.class ,app.getId());
                 LogUtil.d(TAG, "deleteApp: " + packageName);
             } catch (Exception e) {
                 LogUtil.e(TAG, "deleteApp: " + e.getMessage());
             }
+        }
+    }
 
+    public static LiangApp getApp(String packageName) {
+        List<LiangApp> apps = DataSupport.where("packageName = ?", packageName)
+                .find(LiangApp.class);
+        if (apps.size() == 1) {
+            return apps.get(0);
+        } else {
+            return null;
         }
     }
 }

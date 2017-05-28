@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:paddingTop="@dimen/dimen_4"
+    android:paddingBottom="@dimen/dimen_4"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:id="@+id/image_file_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:layout_marginRight="@dimen/dimen_16"
+        android:paddingLeft="@dimen/dimen_16"
+        android:paddingRight="@dimen/dimen_16"
+        app:srcCompat="@drawable/ic_insert_drive_file_red_500_24dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/file_icon"/>
+
+    <ImageButton
+        android:layout_centerVertical="true"
+        android:id="@+id/file_more_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dimen_4"
+        android:layout_marginLeft="@dimen/dimen_4"
+        android:src="@drawable/ic_more_vert_grey_900_24dp"
+        android:backgroundTint="@android:color/transparent"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="@dimen/dimen_4"
+        android:layout_alignParentEnd="true"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/image_file_icon"
+        android:layout_toLeftOf="@id/file_more_button"
+        android:orientation="vertical"
+        tools:ignore="RtlHardcoded">
+
+    <TextView
+        android:id="@+id/text_file_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:padding="2dp"
+        tools:text="@string/app_name"
+        android:textSize="14sp"
+        android:textColor="@color/grey_900"/>
+
+
+
+    <TextView
+        android:id="@+id/text_file_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:padding="2dp"
+        tools:text="@string/one"
+        android:textSize="14sp"
+        android:textColor="@color/grey_900"/>
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

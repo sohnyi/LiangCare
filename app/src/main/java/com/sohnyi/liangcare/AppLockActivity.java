@@ -45,6 +45,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.sohnyi.liangcare.database.MyConstant.MYPACKAGENAME;
 import static com.sohnyi.liangcare.utils.PermissionsActivity.PACKAGE_URL_SCHEME;
 
 /**
@@ -93,6 +94,57 @@ public class AppLockActivity extends AppCompatActivity {
             setSupportActionBar(mToolbar);
         }
 
+/*
+        ListView listView = (ListView) mRecyclerView.findViewById(android.R.id.list);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+
+
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.navigation, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_audio:
+                        ToastUtil.showToast(getApplicationContext(), "audio");
+                        mode.finish();
+                        return true;
+                    case R.id.navigation_photo:
+                        ToastUtil.showToast(getApplicationContext(), "photo");
+                        mode.finish();
+                        return true;
+                    case R.id.navigation_video:
+                        mode.finish();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });
+*/
+
+
         /*判断应用锁服务是否正在运行*/
         if (!ServiceUtils.isServiceRunning(this, LOCK_SERVICE_NAME)) {
             Intent intent = new Intent(this, LockService.class);
@@ -112,7 +164,7 @@ public class AppLockActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                return true;
             }
 
             @Override
@@ -192,7 +244,6 @@ public class AppLockActivity extends AppCompatActivity {
 
         private void bindApp(LiangApp app, String label, Drawable icon, boolean lock) {
             mLabel = label;
-
             mNameTextView.setText(mLabel);
             mIconImageView.setImageDrawable(icon);
             mSwitch.setChecked(lock);
@@ -338,7 +389,9 @@ public class AppLockActivity extends AppCompatActivity {
                 });
                 for (ResolveInfo info : resolveInfos) {
                     String packageName = info.activityInfo.packageName;
-                    mAppLab.addApp(packageName);
+                    if (!packageName.equals(MYPACKAGENAME)) {
+                        mAppLab.addApp(packageName);
+                    }
                 }
                 LiangApp app = new LiangApp();
                 app.setPackageName("com.google.android.packageinstaller");
